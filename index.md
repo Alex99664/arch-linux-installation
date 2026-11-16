@@ -476,7 +476,7 @@ qemu-system-x86_64 \
   -vga std
 ```
 
-This command starts the virtual machine using the existing 40 GB virtual disk.
+This command started up the virtual machine using the existing 40 GB virtual disk.
 
 The `-boot c` option tells QEMU to boot from the virtual hard drive. I removed the installation ISO so the system would not start the installer again.
 
@@ -651,19 +651,19 @@ This time, the output was:
 archlinux
 ```
 
-The problem was solved.
+Problem was solved.
 
 ## 9. Conclusion
 
-Overall, installing Arch Linux manually was more difficult than I originally expected. One of the biggest challenges was that my computer uses an ARM64 processor, while the standard Arch Linux installation image is designed for x86_64 systems.
+Overall, installing Arch Linux manually was more difficult than I originally expected. The biggest challenge was that my computer uses an ARM64 processor, while the standard Arch Linux installation image is designed for x86_64 systems.
 
-I initially attempted to use VirtualBox, but I ran into problems getting the installer to boot. Switching to QEMU allowed me to continue the assignment, although the installation was slower because of emulation.
+I initially attempted to use VirtualBox, but I ran into problems getting the installer to boot. So i was forced to switch to QEMU which allowed me to continue the assignment, although the installation was stalled because of emulation.
 
 I also encountered problems with GRUB, filesystem configuration, and missing commands. Each problem required me to research what was happening and find a way to fix it.
 
 By the end of the assignment, I successfully installed Arch Linux, configured my user account, enabled networking, and verified that the virtual machine could boot from its own virtual hard drive.
 
-The experience helped me better understand Linux installation, partitioning, system configuration, bootloaders, and troubleshooting.
+This experiment helped me obtain understand Linux installation, partitioning, system configuration, bootloaders, and troubleshooting.
 
 ## 10. References
 
@@ -671,6 +671,3 @@ The experience helped me better understand Linux installation, partitioning, sys
 - [Arch Linux GRUB Documentation](https://wiki.archlinux.org/title/GRUB)
 - [QEMU Documentation](https://www.qemu.org/docs/master/system/)
 - [MSYS2 Official Website](https://www.msys2.org/)
-
-
-The `pacman` command is Arch Linux's package manager. The `-S` option installs packages from the configured
