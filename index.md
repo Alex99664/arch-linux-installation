@@ -386,6 +386,23 @@ I found the following line:
 I removed the `#` and the space after it
 
 
+I changed the line to:
+
+```text
+%wheel ALL=(ALL:ALL) ALL
+```
+
+This allows members of the wheel group, including my user account, to run administrative commands using sudo.
+
+After saving the file, I checked my account and the sudo configuration:
+
+```bash
+id alex
+visudo -c
+```
+
+The first command shows which groups my account belongs to. The second checks the sudo configuration for syntax errors.
+
 ## 7. Installing GRUB and Fixing Boot Problems
 
 ### Installing the bootloader
@@ -464,6 +481,53 @@ This command starts the virtual machine using the existing 40 GB virtual disk.
 The `-boot c` option tells QEMU to boot from the virtual hard drive. I removed the installation ISO so the system would not start the installer again.
 
 ### Problem: GRUB opened
+
+
+When I first tried to boot Arch Linux from the virtual hard drive, GRUB opened to a command prompt instead of showing the normal boot menu.
+
+This was confusing because the GRUB installation had reported that it was successful. I needed to figure out why the installed operating system was not starting automatically.
+
+I used the following commands to inspect the available partitions:
+
+```text
+ls
+ls (hd0,msdos1)/boot/
+```
+
+I found the Linux kernel and initial RAM disk on the first partition.
+
+I manually booted Arch Linux using:
+
+```text
+set root=(hd0,msdos1)
+linux /boot/vmlinuz-linux root=/dev/sda1 rw
+initrd /boot/initramfs-linux.img
+boot
+```
+
+These commands told GRUB where to find the installed operating system and allowed me to start Linux.
+
+After logging in, I regenerated the GRUB configuration:
+
+```bash
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+```
+
+I verified that the configuration file existed:
+
+```bash
+ls -l /boot/grub/grub.cfg
+```
+
+Finally, I restarted the virtual machine:
+
+```bash
+sudo reboot
+```
+
+After making this correction, Arch Linux started normally without requiring manual GRUB commands.
+
+This was one of the biggest problems I encountered during the assignment, but it helped me understand how the Linux boot process works.
 
 
 ## 8. Final Verification and Additional Troubleshooting
@@ -569,5 +633,44 @@ To install the missing utility, I ran:
 ```bash
 sudo pacman -S inetutils
 ```
+
+
+The `pacman` command is Arch Linux's package manager. The uppercase `-S` option installs a package, while `inetutils` provides the hostname utility.
+
+I initially made a mistake by using a lowercase `-s` instead of uppercase `-S`. After correcting the command, the package installed successfully.
+
+I checked the hostname again:
+
+```bash
+hostname
+```
+
+This time, the output was:
+
+```text
+archlinux
+```
+
+The problem was solved.
+
+## 9. Conclusion
+
+Overall, installing Arch Linux manually was more difficult than I originally expected. One of the biggest challenges was that my computer uses an ARM64 processor, while the standard Arch Linux installation image is designed for x86_64 systems.
+
+I initially attempted to use VirtualBox, but I ran into problems getting the installer to boot. Switching to QEMU allowed me to continue the assignment, although the installation was slower because of emulation.
+
+I also encountered problems with GRUB, filesystem configuration, and missing commands. Each problem required me to research what was happening and find a way to fix it.
+
+By the end of the assignment, I successfully installed Arch Linux, configured my user account, enabled networking, and verified that the virtual machine could boot from its own virtual hard drive.
+
+The experience helped me better understand Linux installation, partitioning, system configuration, bootloaders, and troubleshooting.
+
+## 10. References
+
+- [Arch Linux Installation Guide](https://wiki.archlinux.org/title/Installation_guide)
+- [Arch Linux GRUB Documentation](https://wiki.archlinux.org/title/GRUB)
+- [QEMU Documentation](https://www.qemu.org/docs/master/system/)
+- [MSYS2 Official Website](https://www.msys2.org/)
+
 
 The `pacman` command is Arch Linux's package manager. The `-S` option installs packages from the configured
