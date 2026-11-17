@@ -671,3 +671,313 @@ This experiment helped me obtain understand Linux installation, partitioning, sy
 - [Arch Linux GRUB Documentation](https://wiki.archlinux.org/title/GRUB)
 - [QEMU Documentation](https://www.qemu.org/docs/master/system/)
 - [MSYS2 Official Website](https://www.msys2.org/)
+
+
+## 11. Additional System Configuration
+
+After completing the main Arch Linux installation, I needed to configure several additional features for the assignment. These included installing a new shell, customizing the terminal colors, creating command aliases, enabling SSH, and installing a graphical desktop environment.
+
+### 11.1 Installing a New Shell (Zsh)
+
+Arch Linux initially used Bash as my default shell. I decided to install Zsh because it supports additional customization and useful command-line features.
+
+I installed Zsh using:
+
+```bash
+sudo pacman -S zsh
+```
+
+This command downloads and installs the Zsh shell using the Pacman package manager.
+
+Next, I changed my default shell:
+
+```bash
+chsh -s /bin/zsh
+```
+
+The `chsh` command changes the login shell associated with my user account.
+
+I logged out using:
+
+```bash
+exit
+```
+
+After logging back in, Zsh displayed an initial configuration menu. I selected option `0` to create a basic configuration file.
+
+I verified the new shell using:
+
+```bash
+echo $SHELL
+```
+
+The output was:
+
+```text
+/bin/zsh
+```
+
+This confirmed that Zsh was now my default shell.
+
+### 11.2 Customizing Shell Colors
+
+Next, I customized my terminal to make it easier to read.
+
+I opened my Zsh configuration file:
+
+```bash
+nano ~/.zshrc
+```
+
+The `.zshrc` file stores settings that Zsh loads when starting an interactive shell.
+
+I added the following lines:
+
+```bash
+autoload -Uz colors
+colors
+PROMPT='%F{green}%n@%m%f:%F{blue}%~%f%# '
+alias ls='ls --color=auto'
+```
+
+The first two commands enable Zsh's color functionality.
+
+The `PROMPT` setting changes the appearance of the command prompt. I configured the username and hostname to appear in green and the current directory to appear in blue.
+
+The `ls` alias enables colored output when listing files.
+
+After saving the file, I applied the changes:
+
+```bash
+source ~/.zshrc
+```
+
+This reloads the configuration without requiring another login.
+
+The terminal prompt displayed the new colors successfully.
+
+### 11.3 Creating Two Command Aliases
+
+I also created two aliases to make frequently used commands easier to execute.
+
+I opened the configuration file again:
+
+```bash
+nano ~/.zshrc
+```
+
+I added:
+
+```bash
+alias ll='ls -la --color=auto'
+alias update='sudo pacman -Syu'
+```
+
+The first alias, `ll`, displays a detailed list of files, including hidden files.
+
+The second alias, `update`, provides a shortcut for updating the system using Pacman.
+
+I saved the file and reloaded the configuration:
+
+```bash
+source ~/.zshrc
+```
+
+I tested the first alias:
+
+```bash
+ll
+```
+
+The terminal displayed a detailed directory listing.
+
+I checked the second alias:
+
+```bash
+type update
+```
+
+The terminal confirmed that `update` was an alias for `sudo pacman -Syu`.
+
+Both aliases worked successfully.
+
+### 11.4 Installing and Configuring SSH
+
+The next requirement was installing SSH, which allows encrypted remote access to a Linux computer.
+
+I installed OpenSSH using:
+
+```bash
+sudo pacman -S openssh
+```
+
+I enabled and started the SSH service:
+
+```bash
+sudo systemctl enable --now sshd
+```
+
+The `enable` option configures SSH to start automatically when the system boots. The `--now` option starts the service immediately.
+
+I checked the service status:
+
+```bash
+systemctl status sshd
+```
+
+The output showed:
+
+```text
+active (running)
+```
+
+This confirmed that the SSH server was operating.
+
+To test an actual connection, I ran:
+
+```bash
+ssh alex@localhost
+```
+
+Because this was my first connection, SSH asked me to confirm the host's identity. I accepted the connection and entered my account password.
+
+After connecting, I verified the logged-in account:
+
+```bash
+whoami
+```
+
+The output was:
+
+```text
+alex
+```
+
+I then exited the SSH session:
+
+```bash
+exit
+```
+
+The test confirmed that I could successfully establish an SSH connection to my Arch Linux system.
+
+### 11.5 Installing the XFCE Desktop Environment
+
+My initial Arch Linux installation only provided a command-line interface. For the desktop environment requirement, I decided to install XFCE.
+
+I selected XFCE because it is relatively lightweight, which was important because my virtual machine was running through QEMU software emulation.
+
+First, I updated the system:
+
+```bash
+sudo pacman -Syu
+```
+
+Next, I attempted to install the graphical desktop packages:
+
+```bash
+sudo pacman -S --needed xorg-server xfce4 xfce4-goodies lightdm lightdm-gtk-greeter
+```
+
+These packages provide the graphical display server, XFCE desktop environment, additional utilities, and LightDM login manager.
+
+I then attempted to enable LightDM:
+
+```bash
+sudo systemctl enable lightdm
+```
+
+Initially, I received an error indicating that the service unit did not exist.
+
+To investigate, I checked whether LightDM was installed:
+
+```bash
+pacman -Q lightdm
+```
+
+I also used the following installation command while troubleshooting:
+
+```bash
+sudo pacman -S lightdm lightdm-gtk-greeter
+```
+
+After getting LightDM installed and enabled, I reached the graphical login screen.
+
+However, another problem appeared.
+
+### 11.6 Troubleshooting the XFCE Login
+
+When I attempted to log into the graphical environment, LightDM displayed a message saying:
+
+```text
+Failed to start session
+```
+
+At first, I thought there might be a problem with my password.
+
+I switched back to a text terminal using `Ctrl + Alt + F2` and successfully logged into my account.
+
+This confirmed that my username and password were working.
+
+Next, I checked whether the XFCE session package was installed:
+
+```bash
+pacman -Q xfce4-session
+```
+
+The terminal reported that the package was not found.
+
+This explained why LightDM could display the graphical login screen but could not start the desktop.
+
+I installed the missing XFCE components:
+
+```bash
+sudo pacman -S --needed xfce4-session xfce4-panel xfdesktop xfwm4 xfce4-settings xfce4-terminal
+```
+
+These packages provide the XFCE session manager, desktop panel, desktop background manager, window manager, settings, and terminal.
+
+After the installation finished, I restarted LightDM:
+
+```bash
+sudo systemctl restart lightdm
+```
+
+The graphical login screen appeared again.
+
+I selected the XFCE session and logged in using my regular account.
+
+This time, the desktop loaded successfully.
+
+### 11.7 Final Results
+
+After completing these additional configuration steps, my Arch Linux virtual machine had the following features:
+
+- Zsh installed as the default shell.
+- A customized terminal with green and blue prompt colors.
+- Two working aliases named `ll` and `update`.
+- An active SSH server.
+- A successful SSH connection using `ssh alex@localhost`.
+- A working XFCE graphical desktop environment.
+
+The most difficult part was configuring the graphical environment. LightDM initially failed to start a session because the necessary XFCE session package was missing.
+
+After installing the missing packages, I was able to log into the desktop normally.
+
+This part of the assignment helped me understand how Linux shells, configuration files, system services, SSH, and desktop environments work together.
+
+### 11.8 Screenshots
+
+The following screenshots document the additional configuration.
+
+**Zsh shell colors and aliases**
+
+![Zsh shell configuration](screenshots/zsh-configuration.png)
+
+**SSH connection and service verification**
+
+![SSH verification](screenshots/ssh-verification.png)
+
+**Working XFCE desktop environment**
+
+![XFCE desktop](screenshots/xfce-desktop.png)
