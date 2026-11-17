@@ -1,6 +1,7 @@
 # Arch Linux Installation Documentation
 
 Course: CYB 3353-02 –System Administration 
+
 Student: Alex Anagnost  
 Operating System: Arch Linux  
 Virtualization Software: QEMU  
