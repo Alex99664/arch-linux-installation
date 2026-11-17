@@ -966,18 +966,18 @@ After installing the missing packages, I was able to log into the desktop normal
 
 This part of the assignment helped me understand how Linux shells, configuration files, system services, SSH, and desktop environments work together.
 
+
 ### 11.8 Screenshots
 
-The following screenshots document the additional configuration.
+**Screenshot 1: Zsh Shell Colors and Aliases**
 
-**Zsh shell colors and aliases**
+![Zsh configuration](Screenshot%202026-11-16%20201838%281%29.png)
 
-![Zsh shell configuration](screenshots/zsh-configuration.png)
+**Screenshot 2: SSH Connection and Verification**
 
-**SSH connection and service verification**
+![SSH verification](Screenshot%202026-11-16%20202115%281%29.png)
 
-![SSH verification](screenshots/ssh-verification.png)
+**Screenshot 3: XFCE Desktop, Zsh, and SSH**
 
-**Working XFCE desktop environment**
+![XFCE desktop and terminal](Screenshot%202026-11-16%20202026%281%29.png)
 
-![XFCE desktop](screenshots/xfce-desktop.png)
